@@ -1,0 +1,17 @@
+{
+  "name": "ssr-rs",
+  "description": "Node.js worker for ssr Rust crate",
+  "version": "0.0.1",
+  "author": "Alex Fedoseev <alex.fedoseev@gmail.com>",
+  "license": "LGPL-3.0",
+  "main": "./worker.js",
+  "keywords": [
+    "rust",
+    "nodejs",
+    "ssr",
+    "react",
+    "vue",
+    "angular",
+    "svelte"
+  ]
+}

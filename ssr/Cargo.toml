@@ -1,0 +1,16 @@
+[package]
+name = "ssr"
+description = "Server-Side Rendering for Rust web servers using Node.js"
+version = "0.0.1"
+authors = ["Alex Fedoseev <alex.fedoseev@gmail.com>"]
+license = "LGPL-3.0"
+edition = "2018"
+keywords = ["nodejs", "ssr", "react", "vue", "angular"]
+
+[dependencies]
+tokio = { version = "0.2", features = ["process", "net", "sync", "time", "io-util"] }
+http = "0.2.2"
+uuid = { version = "0.8.1", features = ["v4", "serde"] }
+serde = "1.0.117"
+serde_json = "1.0.59"
+log = "0.4.11"
