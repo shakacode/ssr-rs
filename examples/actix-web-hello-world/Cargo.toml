@@ -1,8 +1,10 @@
 [package]
 name = "actix-web-hello-world"
-version = "0.0.1"
+version = "0.0.0"
 edition = "2018"
 authors = ["Alex Fedoseev <alex.fedoseev@gmail.com>"]
+workspace = "../../"
+publish = false
 
 [dependencies]
 actix-web = "3.2.0"
