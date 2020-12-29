@@ -131,7 +131,7 @@ impl Ssr {
 
         let mut res = String::new();
 
-        if let Err(err) = stream.write(input.as_slice()).await {
+        if let Err(err) = stream.write_all(input.as_slice()).await {
             Self::finalize_rendering_session(&worker, &stream, &request_id);
             return Err(RenderingError::RenderRequestError(err));
         };
