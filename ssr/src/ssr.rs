@@ -14,13 +14,25 @@ use crate::{
 };
 
 pub enum JsRenderer {
+    /// Global JS renderer that was passed to [`Ssr::new`](Ssr::new) during initialization via
+    /// [`SsrConfig`](SsrConfig::global_js_renderer).
     Global,
+    /// JS renderer specific to the current request.
     PerRequest { path: PathBuf },
 }
 
 pub struct SsrConfig {
+    /// A port that Node.js worker will be listening on.
     pub port: u16,
+    /// Path to Node.js worker installed from `npm`. It should be relative to the
+    /// [`std::env::current_dir`](std::env::current_dir).
     pub js_worker: PathBuf,
+    /// If your web app is a SPA (Single Page Application), then you should have a single entry
+    /// point for all rendering requests. If it's the case, provide a path to this file here and it
+    /// will be used by the worker to render all responses. Another option is to provide a JS
+    /// renderer per request but keep in mind that it would introduce additional runtime overhead
+    /// since JS module has to be required during a request as opposed to requiring it once on
+    /// application startup.
     pub global_js_renderer: Option<PathBuf>,
 }
 
@@ -32,6 +44,20 @@ pub struct Ssr {
 }
 
 impl Ssr {
+    /// Creates an [`Ssr`](Ssr) instance.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// let ssr =
+    ///   Ssr::new(
+    ///     SsrConfig {
+    ///       port: 9000,
+    ///       js_worker: PathBuf::from("./node_modules/ssr-rs/worker.js"),
+    ///       global_js_renderer: Some(PathBuf::from("./js/ssr.js")),
+    ///     }
+    ///   );
+    /// ```
     pub async fn new(cfg: SsrConfig) -> Result<Self, InitializationError> {
         let port = Port::new(cfg.port);
         let js_worker = match fs::canonicalize(cfg.js_worker) {
@@ -53,6 +79,20 @@ impl Ssr {
         })
     }
 
+    /// Renders a response to an incoming request using Node.js worker.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// let uri = req.uri();
+    /// let data = db::get_data();
+    /// match ssr.render(uri, &data, JsRenderer::Global).await {
+    ///     Ok(html) => HttpResponse::Ok().body(html),
+    ///     Err(error) => {
+    ///         error!("Error: {}", error);
+    ///         HttpResponse::InternalServerError().finish()
+    ///     }
+    /// }
     pub async fn render<D: Serialize>(
         &self,
         uri: &Uri,
