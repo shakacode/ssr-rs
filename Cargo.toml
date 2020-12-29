@@ -1,5 +1,6 @@
 [workspace]
 members = [
   "ssr",
-  "examples/actix-web-hello-world"
+  "examples/actix-web-hello-world",
+  "examples/rocket-hello-world"
 ]
