@@ -18,6 +18,8 @@ const log = (msg, reqId) => {
   process.stderr.write(`${worker}: ${message}`);
 };
 
+log(`Node.js version: ${process.version}`);
+
 process.on("uncaughtException", (err, origin) => {
   log(`Uncaught Exception: ${err}`);
   process.exit(1);
@@ -49,6 +51,8 @@ server.on("connection", connection => {
   let contents = null;
 
   connection.on("data", bytes => {
+    log(`New data chunk`);
+
     try {
       let chunk = Buffer.from(bytes, ENCODING);
 

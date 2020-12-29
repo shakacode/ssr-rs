@@ -69,7 +69,7 @@ impl Ssr {
             Ok(stream) => stream,
             Err(err) => {
                 error!(
-                    "{worker}: Failed to restart: {err}",
+                    "{worker}: Failed to connect: {err}",
                     worker = worker.display_with_request_id(&request_id),
                     err = err
                 );
@@ -131,17 +131,37 @@ impl Ssr {
 
         let mut res = String::new();
 
+        trace!(
+            "{worker}: Writing input to socket",
+            worker = worker.display_with_request_id(&request_id),
+        );
+
         if let Err(err) = stream.write_all(input.as_slice()).await {
             Self::finalize_rendering_session(&worker, &stream, &request_id);
             return Err(RenderingError::RenderRequestError(err));
         };
+
+        trace!(
+            "{worker}: Input written to socket",
+            worker = worker.display_with_request_id(&request_id),
+        );
+
         if let Err(err) = stream.read_to_string(&mut res).await {
             Self::finalize_rendering_session(&worker, &stream, &request_id);
             return Err(RenderingError::RenderResponseError(err));
         };
 
+        trace!(
+            "{worker}: Output written to result buffer",
+            worker = worker.display_with_request_id(&request_id),
+        );
+
         // No need to shutdown connection as it's already closed by the js worker
         if res.starts_with("ERROR:") {
+            trace!(
+                "{worker}: Output is an error",
+                worker = worker.display_with_request_id(&request_id),
+            );
             match res.splitn(2, ':').collect::<Vec<_>>().as_slice() {
                 ["ERROR", stack] => Err(RenderingError::JsExceptionDuringRendering(
                     stack.to_string(),
@@ -149,6 +169,11 @@ impl Ssr {
                 _ => unreachable!(),
             }
         } else {
+            trace!(
+                "{worker}: Output is ok",
+                worker = worker.display_with_request_id(&request_id),
+            );
+            Self::finalize_rendering_session(&worker, &stream, &request_id);
             Ok(res)
         }
     }
