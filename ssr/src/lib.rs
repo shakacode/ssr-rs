@@ -4,7 +4,7 @@
 //! Add to your `Cargo.toml`:
 //!
 //! ```toml
-//! ssr = "0.0.3"
+//! ssr = "0.0.4"
 //! ```
 //!
 //! And install node worker from `npm`:

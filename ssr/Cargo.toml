@@ -1,7 +1,7 @@
 [package]
 name = "ssr"
 description = "Server-Side Rendering for Rust web servers using Node.js"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["Alex Fedoseev <alex.fedoseev@gmail.com>"]
 license = "LGPL-3.0"
 readme = "../README.md"
