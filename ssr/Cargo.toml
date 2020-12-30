@@ -1,11 +1,15 @@
 [package]
 name = "ssr"
 description = "Server-Side Rendering for Rust web servers using Node.js"
-version = "0.0.1"
+version = "0.0.0"
 authors = ["Alex Fedoseev <alex.fedoseev@gmail.com>"]
 license = "LGPL-3.0"
+homepage = "https://github.com/shakacode/ssr-rs"
+repository = "https://github.com/shakacode/ssr-rs"
+documentation = "https://docs.rs/ssr"
 edition = "2018"
 keywords = ["nodejs", "ssr", "react", "vue", "angular"]
+exclude = ["js/*"]
 
 [dependencies]
 tokio = { version = "0.2", features = ["process", "net", "sync", "time", "io-util"] }
