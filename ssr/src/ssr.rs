@@ -13,14 +13,19 @@ use crate::{
     worker::{Port, Worker},
 };
 
+/// Enum that instructs which JS renderer to use when [`ssr.render`](Ssr::render) gets called.
 pub enum JsRenderer {
     /// Global JS renderer that was passed to [`Ssr::new`](Ssr::new) during initialization via
     /// [`SsrConfig`](SsrConfig::global_js_renderer).
     Global,
     /// JS renderer specific to the current request.
-    PerRequest { path: PathBuf },
+    PerRequest {
+        /// A path to JS renderer
+        path: PathBuf,
+    },
 }
 
+/// A global configuration for [`Ssr`](Ssr) instance.
 pub struct SsrConfig {
     /// A port that Node.js worker will be listening on.
     pub port: u16,
@@ -36,6 +41,7 @@ pub struct SsrConfig {
     pub global_js_renderer: Option<PathBuf>,
 }
 
+/// The main struct of the crate that manages Node.js process and handles rendering.
 #[derive(Clone)]
 pub struct Ssr {
     worker: Arc<Worker>,

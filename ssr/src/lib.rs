@@ -1,3 +1,5 @@
+#![deny(missing_docs)]
+
 //! ## Installation
 //! Add to your `Cargo.toml`:
 //!
@@ -16,14 +18,14 @@
 //! ```
 //!
 //! ## How it works
-//! On application start, you create an `Ssr` instance. Under the hood, it spins up a Node.js
-//! worker ready to accept rendering requests. `Ssr` instance should be stored in a web server's
-//! state, so handlers can access it during a handling of incoming requests.
+//! On application start, you create an [`Ssr`](Ssr) instance. Under the hood, it spins up a
+//! Node.js worker ready to accept rendering requests. [`Ssr`](Ssr) instance should be stored in a
+//! web server's state, so handlers can access it during a handling of incoming requests.
 //!
-//! `Ssr` instance exposes a single method `render`, which accepts `Uri` and serializable data as
-//! an input. If everything went smooth, it returns a rendered `String`. This string can be a plain
-//! HTML or an app-specific encoded object with additional metadata—whatever returned from a JS
-//! renderer, supplied by the app.
+//! [`Ssr`](Ssr) exposes a single method [`render`](Ssr::render), which accepts [`Uri`](http::Uri)
+//! and serializable data as an input. If everything went smooth, it returns a rendered `String`.
+//! This string can be a plain HTML or an app-specific encoded object with additional
+//! metadata—whatever returned from a JS renderer, supplied by the app.
 //!
 //! ## Initialization
 //!
