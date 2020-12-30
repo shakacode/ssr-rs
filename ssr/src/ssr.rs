@@ -219,7 +219,6 @@ impl Ssr {
                 "{worker}: Output is ok",
                 worker = worker.display_with_request_id(&request_id),
             );
-            Self::finalize_rendering_session(&worker, &stream, &request_id);
             Ok(res)
         }
     }
