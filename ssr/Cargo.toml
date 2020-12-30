@@ -4,6 +4,7 @@ description = "Server-Side Rendering for Rust web servers using Node.js"
 version = "0.0.1"
 authors = ["Alex Fedoseev <alex.fedoseev@gmail.com>"]
 license = "LGPL-3.0"
+readme = "../README.md"
 homepage = "https://github.com/shakacode/ssr-rs"
 repository = "https://github.com/shakacode/ssr-rs"
 documentation = "https://docs.rs/ssr"
