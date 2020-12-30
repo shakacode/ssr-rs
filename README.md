@@ -1,4 +1,4 @@
-# ssr-rs
+# ssr
 
 [![crates.io](https://meritbadge.herokuapp.com/ssr)](https://crates.io/crates/ssr)
 [![API docs](https://docs.rs/ssr/badge.svg)](https://docs.rs/ssr)
