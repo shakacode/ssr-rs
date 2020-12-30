@@ -2,7 +2,7 @@
 //! Add to your `Cargo.toml`:
 //!
 //! ```toml
-//! ssr = "0.0.1"
+//! ssr = "0.0.2"
 //! ```
 //!
 //! And install node worker from `npm`:
