@@ -4,7 +4,7 @@ extern crate log;
 use std::path::PathBuf;
 
 use actix_web::{web, web::Data, App, HttpRequest, HttpResponse, HttpServer};
-use ssr::{JsRenderer, Ssr, SsrConfig};
+use ssr::{JsRenderer, JsWorkerLog, Ssr, SsrConfig};
 
 #[actix_web::main]
 pub async fn main() -> std::io::Result<()> {
@@ -13,6 +13,7 @@ pub async fn main() -> std::io::Result<()> {
     let ssr = Ssr::new(SsrConfig {
         port: 9000,
         js_worker: PathBuf::from("./ssr/js/worker.js"),
+        js_worker_log: JsWorkerLog::Verbose,
         global_js_renderer: Some(PathBuf::from(
             "./examples/actix-web-hello-world/src/renderer.js",
         )),

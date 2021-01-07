@@ -35,6 +35,7 @@
 //!     SsrConfig {
 //!       port: 9000,
 //!       js_worker: PathBuf::from("./node_modules/ssr-rs/worker.js"),
+//!       js_worker_log: JsWorkerLog::Verbose,
 //!       global_js_renderer: Some(PathBuf::from("./js/ssr.js")),
 //!     }
 //!   );
@@ -46,6 +47,10 @@
 //! ### `js_worker`
 //! Path to Node.js worker installed from `npm`. It should be relative to the
 //! [`std::env::current_dir`](std::env::current_dir).
+//!
+//! ### `js_worker_log`
+//! Log verbosity of Node.js worker: either [`Minimal`](JsWorkerLog::Minimal) or
+//! [`Verbose`](JsWorkerLog::Verbose).
 //!
 //! ### `global_js_renderer`
 //! If your web app is a SPA (Single Page Application), then you should have a single entry point
@@ -85,4 +90,4 @@ mod json;
 mod ssr;
 mod worker;
 
-pub use ssr::{JsRenderer, Ssr, SsrConfig};
+pub use ssr::{JsRenderer, JsWorkerLog, Ssr, SsrConfig};

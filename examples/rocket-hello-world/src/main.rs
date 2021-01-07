@@ -10,7 +10,7 @@ use rocket::{
     response::{content::Html, status},
     Rocket, State,
 };
-use ssr::{JsRenderer, Ssr, SsrConfig};
+use ssr::{JsRenderer, JsWorkerLog, Ssr, SsrConfig};
 
 #[launch]
 async fn rocket() -> Rocket {
@@ -19,6 +19,7 @@ async fn rocket() -> Rocket {
     let ssr = Ssr::new(SsrConfig {
         port: 9000,
         js_worker: PathBuf::from("./ssr/js/worker.js"),
+        js_worker_log: JsWorkerLog::Verbose,
         global_js_renderer: Some(PathBuf::from(
             "./examples/rocket-hello-world/src/renderer.js",
         )),

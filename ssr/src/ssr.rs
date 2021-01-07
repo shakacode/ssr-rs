@@ -25,6 +25,23 @@ pub enum JsRenderer {
     },
 }
 
+/// Sets log verbosity of Node.js worker.
+pub enum JsWorkerLog {
+    /// Logs only warnings and errors.
+    Minimal,
+    /// Logs all debugging information.
+    Verbose,
+}
+
+impl JsWorkerLog {
+    pub(crate) fn to_str(&self) -> &str {
+        match self {
+            JsWorkerLog::Minimal => "minimal",
+            JsWorkerLog::Verbose => "verbose",
+        }
+    }
+}
+
 /// A global configuration for [`Ssr`](Ssr) instance.
 pub struct SsrConfig {
     /// A port that Node.js worker will be listening on.
@@ -32,6 +49,8 @@ pub struct SsrConfig {
     /// Path to Node.js worker installed from `npm`. It should be relative to the
     /// [`std::env::current_dir`](std::env::current_dir).
     pub js_worker: PathBuf,
+    /// Log verbosity of Node.js worker.
+    pub js_worker_log: JsWorkerLog,
     /// If your web app is a SPA (Single Page Application), then you should have a single entry
     /// point for all rendering requests. If it's the case, provide a path to this file here and it
     /// will be used by the worker to render all responses. Another option is to provide a JS
@@ -60,6 +79,7 @@ impl Ssr {
     ///     SsrConfig {
     ///       port: 9000,
     ///       js_worker: PathBuf::from("./node_modules/ssr-rs/worker.js"),
+    ///       js_worker_log: JsWorkerLog::Verbose,
     ///       global_js_renderer: Some(PathBuf::from("./js/ssr.js")),
     ///     }
     ///   );
@@ -77,7 +97,8 @@ impl Ssr {
             },
             None => None,
         };
-        let worker = Worker::new(&port, &js_worker, &global_js_renderer).await?;
+        let worker =
+            Worker::new(&port, &js_worker, &cfg.js_worker_log, &global_js_renderer).await?;
         Ok(Self {
             worker: Arc::new(worker),
             js_worker,

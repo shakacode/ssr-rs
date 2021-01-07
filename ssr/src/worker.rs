@@ -7,7 +7,7 @@ use tokio::{
 };
 use uuid::Uuid;
 
-use crate::error::InitializationError;
+use crate::{error::InitializationError, JsWorkerLog};
 
 #[derive(Hash, Eq, PartialEq, Clone, Debug)]
 pub(crate) struct Port(u16);
@@ -56,6 +56,7 @@ impl Process {
     pub fn spawn(
         port: &Port,
         js_worker: &PathBuf,
+        js_worker_log: &JsWorkerLog,
         global_js_renderer: &Option<PathBuf>,
     ) -> Result<Child, io::Error> {
         let mut cmd = Command::new(Process::SHELL);
@@ -65,6 +66,7 @@ impl Process {
             js_worker.as_path().display()
         )));
         cmd.env("PORT", port.to_string());
+        cmd.env("LOG", js_worker_log.to_str());
 
         if let Some(global_renderer) = global_js_renderer {
             cmd.env(
@@ -88,9 +90,10 @@ impl Worker {
     pub async fn new(
         port: &Port,
         js_worker: &PathBuf,
+        js_worker_log: &JsWorkerLog,
         global_js_renderer: &Option<PathBuf>,
     ) -> Result<Self, InitializationError> {
-        let process = Process::spawn(port, js_worker, global_js_renderer)?;
+        let process = Process::spawn(port, js_worker, js_worker_log, global_js_renderer)?;
 
         Ok(Self {
             addr: port.to_socket_addr(),
