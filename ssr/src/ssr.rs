@@ -229,12 +229,8 @@ impl Ssr {
                 "{worker}: Output is an error",
                 worker = worker.display_with_request_id(&request_id),
             );
-            match res.splitn(2, ':').collect::<Vec<_>>().as_slice() {
-                ["ERROR", stack] => Err(RenderingError::JsExceptionDuringRendering(
-                    stack.to_string(),
-                )),
-                _ => unreachable!(),
-            }
+            let stack = res.strip_prefix("ERROR:").unwrap();
+            Err(RenderingError::JsExceptionDuringRendering(stack.to_string()))
         } else {
             trace!(
                 "{worker}: Output is ok",
