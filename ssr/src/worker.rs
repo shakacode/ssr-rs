@@ -61,6 +61,8 @@ impl Process {
     ) -> Result<Child, io::Error> {
         let mut cmd = Command::new(Process::SHELL);
 
+        cmd.kill_on_drop(true);
+
         cmd.args(Process::cmd(&format!(
             "node {}",
             js_worker.as_path().display()
