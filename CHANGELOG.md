@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.6
+- [BUG] Kill a worker process when the main process exits.
+
 ## 0.0.5
 - [NEW] Added log verbosity customization of Node.js worker.
 
