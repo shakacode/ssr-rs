@@ -22,6 +22,11 @@ Please, contact us via [contact@shakacode.com](mailto:contact@shakacode.com) for
 
 `ssr` has a commercial-friendly license allowing private forks and modifications of `ssr`. You can find the commercial license terms in [COMMERCIAL-LICENSE](./COMMERCIAL-LICENSE).
 
+> ### ShakaCode
+> If you are looking for help with the development and optimization of your project, [ShakaCode](https://www.shakacode.com) can help you to take the reliability and performance of your app to the next level.
+>
+> If you are a developer interested in working on Rust / ReScript / TypeScript / Ruby on Rails projects, [we're hiring](https://www.shakacode.com/career/)!
+
 ## Supporters
 
 <a href="https://www.jetbrains.com">
