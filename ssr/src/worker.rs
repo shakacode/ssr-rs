@@ -105,7 +105,7 @@ impl Worker {
 
     pub fn display(&self) -> String {
         format!(
-            "[RS] Worker [id: {} port: {}]",
+            "[RS] Worker [id: {:?} port: {:?}]",
             self.process.id(),
             self.addr.port()
         )
@@ -113,7 +113,7 @@ impl Worker {
 
     pub fn display_with_request_id(&self, request_id: &Uuid) -> String {
         format!(
-            "[RS] Worker [id: {} port: {} request: {}]",
+            "[RS] Worker [id: {:?} port: {} request: {}]",
             self.process.id(),
             self.addr.port(),
             request_id
@@ -134,7 +134,7 @@ impl Worker {
                         attempt = attempt,
                         delay = delay
                     );
-                    time::delay_for(std::time::Duration::from_millis(delay)).await
+                    time::sleep(std::time::Duration::from_millis(delay)).await
                 }
             }
             match TcpStream::connect(self.addr).await {
