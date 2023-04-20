@@ -147,7 +147,7 @@ impl Ssr {
         let url = match uri.path_and_query() {
             Some(url) => url,
             None => {
-                Self::finalize_rendering_session(&worker, &stream, &request_id);
+                Self::finalize_rendering_session(&worker, &mut stream, &request_id);
                 return Err(RenderingError::InvalidUri);
             }
         };
@@ -156,7 +156,7 @@ impl Ssr {
             (Some(_), JsRenderer::Global) => None,
             (_, JsRenderer::PerRequest { path }) => Some(path),
             (None, JsRenderer::Global) => {
-                Self::finalize_rendering_session(&worker, &stream, &request_id);
+                Self::finalize_rendering_session(&worker, &mut stream, &request_id);
                 return Err(RenderingError::GlobalRendererNotProvided);
             }
         };
@@ -169,21 +169,21 @@ impl Ssr {
         let meta_bytes = match serde_json::to_vec(&meta) {
             Ok(bytes) => bytes,
             Err(err) => {
-                Self::finalize_rendering_session(&worker, &stream, &request_id);
+                Self::finalize_rendering_session(&worker, &mut stream, &request_id);
                 return Err(RenderingError::UrlSerializationError(err));
             }
         };
         let data = match serde_json::to_string(&data) {
             Ok(data) => data,
             Err(err) => {
-                Self::finalize_rendering_session(&worker, &stream, &request_id);
+                Self::finalize_rendering_session(&worker, &mut stream, &request_id);
                 return Err(RenderingError::DataSerializationError(err));
             }
         };
         let data_bytes = match crate::json::to_vec(&data) {
             Ok(bytes) => bytes,
             Err(err) => {
-                Self::finalize_rendering_session(&worker, &stream, &request_id);
+                Self::finalize_rendering_session(&worker, &mut stream, &request_id);
                 return Err(RenderingError::DataSerializationError(err));
             }
         };
@@ -204,7 +204,7 @@ impl Ssr {
         );
 
         if let Err(err) = stream.write_all(input.as_slice()).await {
-            Self::finalize_rendering_session(&worker, &stream, &request_id);
+            Self::finalize_rendering_session(&worker, &mut stream, &request_id);
             return Err(RenderingError::RenderRequestError(err));
         };
 
@@ -214,7 +214,7 @@ impl Ssr {
         );
 
         if let Err(err) = stream.read_to_string(&mut res).await {
-            Self::finalize_rendering_session(&worker, &stream, &request_id);
+            Self::finalize_rendering_session(&worker, &mut stream, &request_id);
             return Err(RenderingError::RenderResponseError(err));
         };
 
@@ -240,13 +240,7 @@ impl Ssr {
         }
     }
 
-    fn finalize_rendering_session(worker: &Worker, connection: &TcpStream, request_id: &Uuid) {
-        if let Err(err) = connection.shutdown(Shutdown::Both) {
-            warn!(
-                "{worker}: Failed to shutdown connection to the js worker: {err}",
-                worker = worker.display_with_request_id(&request_id),
-                err = err
-            );
-        };
+    fn finalize_rendering_session(worker: &Worker, connection: &mut TcpStream, request_id: &Uuid) {
+        connection.shutdown();
     }
 }
