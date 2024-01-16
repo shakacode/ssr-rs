@@ -23,7 +23,7 @@ pub async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .data(ssr.clone())
+            .app_data(Data::new(ssr.clone()))
             .route("/", web::get().to(hello_world))
     })
     .bind("127.0.0.1:3000")?
